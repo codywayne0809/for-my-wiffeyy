@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Cody & Thea — Simple Website For My Baby</title>
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface": "#fff8f4",
+            "primary-container": "#d9c5b2",
+            "surface-container-high": "#f2e6dc",
+            "on-error-container": "#93000a",
+            "on-primary-container": "#605142",
+            "on-secondary": "#ffffff",
+            "on-tertiary-fixed": "#1c1b1b",
+            "on-secondary-fixed-variant": "#474744",
+            "surface-container": "#f8ece1",
+            "error": "#ba1a1a",
+            "background": "#fff8f4",
+            "tertiary-fixed": "#e5e2e1",
+            "surface-dim": "#e3d8ce",
+            "tertiary-fixed-dim": "#c8c6c5",
+            "on-tertiary-container": "#545453",
+            "inverse-primary": "#d7c3b0",
+            "primary-fixed": "#f4dfcb",
+            "surface-container-low": "#fef2e7",
+            "on-primary": "#ffffff",
+            "surface-container-highest": "#ece1d6",
+            "secondary-container": "#e1dfdb",
+            "on-secondary-fixed": "#1b1c19",
+            "on-surface": "#201b14",
+            "outline-variant": "#d0c4bb",
+            "primary-fixed-dim": "#d7c3b0",
+            "inverse-surface": "#362f28",
+            "on-error": "#ffffff",
+            "on-background": "#201b14",
+            "primary": "#6b5c4c",
+            "tertiary": "#5f5e5e",
+            "surface-tint": "#6b5c4c",
+            "surface-container-lowest": "#ffffff",
+            "outline": "#7f756d",
+            "on-tertiary-fixed-variant": "#474746",
+            "inverse-on-surface": "#fbefe4",
+            "on-tertiary": "#ffffff",
+            "tertiary-container": "#cac8c7",
+            "secondary-fixed-dim": "#c8c6c2",
+            "secondary": "#5e5e5b",
+            "secondary-fixed": "#e4e2dd",
+            "error-container": "#ffdad6",
+            "on-primary-fixed": "#241a0e",
+            "on-secondary-container": "#63635f",
+            "surface-variant": "#ece1d6",
+            "on-surface-variant": "#4d453e",
+            "on-primary-fixed-variant": "#524436",
+            "surface-bright": "#fff8f4"
+          },
+          borderRadius: {
+            DEFAULT: "0.25rem",
+            lg: "0.5rem",
+            xl: "0.75rem",
+            full: "9999px"
+          },
+          fontFamily: {
+            "body-lg": ["DM Sans"],
+            "label-md": ["DM Sans"],
+            "headline-md": ["Playfair Display"],
+            "headline-lg": ["Playfair Display"],
+            "headline-sm": ["Playfair Display"],
+            "body-md": ["DM Sans"],
+            "headline-lg-mobile": ["Playfair Display"]
+          },
+          fontSize: {
+            "body-lg": ["18px", { lineHeight: "1.6", fontWeight: "400" }],
+            "label-md": ["14px", { lineHeight: "1.0", letterSpacing: "0.05em", fontWeight: "500" }],
+            "headline-md": ["48px", { lineHeight: "1.2", fontWeight: "500" }],
+            "headline-lg": ["64px", { lineHeight: "1.1", letterSpacing: "-0.02em", fontWeight: "600" }],
+            "headline-sm": ["32px", { lineHeight: "1.3", fontWeight: "500" }],
+            "body-md": ["16px", { lineHeight: "1.6", fontWeight: "400" }],
+            "headline-lg-mobile": ["32px", { lineHeight: "1.2", fontWeight: "600" }]
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+    }
+
+    /* ── Flip Card ── */
+    .flip-card {
+      perspective: 1200px;
+      cursor: pointer;
+    }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.75s cubic-bezier(0.4, 0.2, 0.2, 1);
+    }
+
+    .flip-card.flipped .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flip-card-front,
+    .flip-card-back {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: 0.75rem;
+      overflow: hidden;
+    }
+
+    .flip-card-back {
+      transform: rotateY(180deg);
+      background: #6b5c4c;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    /* Hint badge */
+    .flip-hint {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      background: rgba(255, 248, 244, 0.85);
+      color: #6b5c4c;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      padding: 5px 10px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      z-index: 5;
+    }
+
+    .flip-card.flipped .flip-hint {
+      opacity: 0;
+    }
+
+    /* ── Image zoom (non-flip images) ── */
+    .image-zoom {
+      overflow: hidden;
+      position: relative;
+    }
+
+    .image-zoom img {
+      transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .image-zoom:hover img {
+      transform: scale(1.04);
+    }
+
+    .soft-glow {
+      box-shadow: 0 10px 40px rgba(95, 94, 94, 0.06);
+    }
+
+    /* ── Hero Animations ── */
+    .hero-item {
+      opacity: 0;
+      transform: translateY(15px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .hero-item.hero-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Universal Scroll Reveal ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Video Section ── */
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      /* 16:9 */
+      height: 0;
+      border-radius: 0.75rem;
+      overflow: hidden;
+    }
+
+    .video-wrapper iframe,
+    .video-wrapper video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .video-placeholder {
+      position: absolute;
+      inset: 0;
+      background: #ece1d6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      color: #6b5c4c;
+    }
+
+    .video-play-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: #6b5c4c;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ── Pulse animation on flip hint ── */
+    @keyframes gentle-pulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.06);
+      }
+    }
+
+    .flip-hint {
+      animation: gentle-pulse 2.5s ease-in-out infinite;
+    }
+
+    @media (max-width: 640px) {
+      .hero-label {
+        font-size: 11px !important;
+        letter-spacing: 0.2em !important;
+      }
+
+      .hero-title {
+        font-size: 32px !important;
+        line-height: 1.2 !important;
+      }
+
+      .hero-body {
+        font-size: 14px !important;
+        line-height: 1.6 !important;
+      }
+
+      .hero-btn {
+        font-size: 11px !important;
+        padding: 12px 24px !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-surface text-on-surface selection:bg-primary-container selection:text-on-primary-container">
+
+  <header
+    class="fixed top-0 w-full bg-surface/95 flex justify-center items-center py-4 z-50 border-b border-surface-container-low/50 shadow-sm">
+    <div class="flex items-center gap-2">
+      <span class="material-symbols-outlined text-primary" style="font-variation-settings:'FILL' 1;">favorite</span>
+      <div class="font-headline-sm text-[18px] md:text-[22px] text-on-surface tracking-tighter">Cody & Thea</div>
+    </div>
+  </header>
+
+  <main class="pt-[60px]">
+
+    <section
+      class="relative w-full min-h-screen md:h-[90vh] flex items-center justify-center overflow-hidden bg-[#d8d5d0] py-12 md:py-0">
+
+      <div class="absolute inset-0 z-0 w-full h-full flex justify-center items-center">
+        <img alt="Hero background photostrip"
+          class="w-full h-full object-cover md:object-contain block select-none pointer-events-none mx-auto"
+          src="images/image1.jfif" fetchpriority="high">
+        <div class="absolute inset-0 bg-black/40 md:bg-black/25"></div>
+        <canvas id="hero-effects-canvas" style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:5;"></canvas>
+      </div>
+
+      <div
+        class="relative z-10 text-center px-4 flex flex-col items-center justify-center w-full max-w-lg mx-auto h-full my-auto">
+        <div class="bg-white/90 backdrop-blur-md p-6 md:p-8 rounded-2xl shadow-2xl border border-white/20 w-full">
+
+          <span class="material-symbols-outlined text-primary text-[32px] mb-2 block"
+            style="font-variation-settings:'FILL' 1;">
+            photo_library
+          </span>
+
+          <span
+            class="hero-item hero-label font-label-md text-label-md uppercase tracking-[0.2em] text-primary mb-3 block font-bold"
+            style="transition-delay:0ms;">
+            Our Pictures Together
+          </span>
+
+          <h1
+            class="hero-item hero-title font-headline-lg-mobile md:font-headline-sm text-[28px] md:text-[34px] text-on-surface font-bold mb-4 leading-tight"
+            style="transition-delay:150ms;">
+            Forever With You My Love.
+          </h1>
+
+          <p class="hero-item hero-body font-body-md text-[14px] md:text-[15px] text-on-surface-variant font-medium leading-relaxed mb-6 max-w-sm mx-auto"
+            style="transition-delay:300ms;">
+            Sa ngayon po di pa ganun kadami pics natin but road to forever na po tayo kaya expect more memories to be
+            added here as we go along. Love you so much, my Thea!
+          </p>
+
+          <button id="gallery-trigger"
+            class="hero-item hero-btn mx-auto bg-primary text-white px-8 py-3 rounded-full font-label-md text-label-md uppercase tracking-widest hover:bg-on-surface hover:text-white transition-all duration-500 flex items-center gap-2 shadow-lg cursor-pointer"
+            style="transition-delay:450ms;">
+            Click this my love!! <span class="material-symbols-outlined text-[16px]">keyboard_arrow_down</span>
+          </button>
+
+          <audio id="my-voice" src="recording.mp3" preload="auto"></audio>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="relative py-12 md:py-28 px-4 md:px-20 bg-surface overflow-hidden" id="our-story">
+
+      <!-- Falling hearts canvas — sits behind everything -->
+      <canvas id="hearts-canvas"
+        style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;"></canvas>
+
+      <div class="relative z-10 max-w-6xl mx-auto">
+
+        <div class="text-center mb-10 md:mb-20 reveal">
+          <span
+            class="font-label-md text-label-md uppercase tracking-widest text-primary mb-2 block italic text-[13px]">
+            EVERY MOMENTS WITH YOU
+          </span>
+          <h2
+            class="font-headline-md text-[20px] md:text-[26px] text-on-surface flex items-center justify-center gap-1">
+            <span class="material-symbols-outlined text-[20px] align-middle">touch_app</span>
+            CLICK MO PO KADA PIC LOVE
+          </h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-start">
+
+          <div class="md:col-span-7 w-full aspect-[4/5] reveal soft-glow flip-card"
+            onclick="this.classList.toggle('flipped')">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <img class="w-full h-full object-cover rounded-xl" alt="Main story feature" src="images/image2.jfif">
+                <div class="flip-hint">
+                  <span class="material-symbols-outlined text-[13px]"
+                    style="font-variation-settings:'FILL' 1;">touch_app</span>
+                  Tap to reveal
+                </div>
+              </div>
+              <div class="flip-card-back">
+                <span class="material-symbols-outlined text-surface/60 text-[32px] mb-4"
+                  style="font-variation-settings:'FILL' 1;">
+                  linked_camera
+                </span>
+                <h3 class="font-headline-sm text-[20px] text-surface mb-3">Our First Kiss</h3>
+                <p class="font-body-md text-body-md text-surface/80 leading-relaxed">
+                  Eto yung 2nd photobooth natinn loveee and dito yung unang kiss natenn naalala ko padin yung araw
+                  nayunn and kilig na kilig akoo that moment was so magical, Hanggang ngayun lovee pagnakikita kotong
+                  pic natinn bumabalik yung kilig sa puso kooo keychain pa natin sya lovee kaya pagka gamit ko bag ko
+                  lagi ko nakikitaa. I loveyouu so much poo.
+                </p>
+                <button onclick="event.stopPropagation(); this.closest('.flip-card').classList.remove('flipped')"
+                  class="mt-6 text-surface/60 font-label-md text-[12px] uppercase tracking-widest flex items-center gap-1 hover:text-surface transition-colors">
+                  <span class="material-symbols-outlined text-[14px]">flip_camera_android</span> Flip back
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="md:col-span-5 w-full flex flex-col gap-6 md:gap-8">
+
+            <div class="w-full aspect-square reveal soft-glow flip-card" onclick="this.classList.toggle('flipped')">
+              <div class="flip-card-inner">
+                <div class="flip-card-front">
+                  <img class="w-full h-full object-cover rounded-xl" alt="Interlaced hands" src="images/image3.jfif">
+                  <div class="flip-hint">
+                    <span class="material-symbols-outlined text-[13px]"
+                      style="font-variation-settings:'FILL' 1;">touch_app</span>
+                    Tap to reveal
+                  </div>
+                </div>
+                <div class="flip-card-back">
+                  <span class="material-symbols-outlined text-surface/60 text-[32px] mb-4"
+                    style="font-variation-settings:'FILL' 1;">
+                    volunteer_activism
+                  </span>
+                  <h3 class="font-headline-sm text-[18px] text-surface mb-3">First Libre Mo Sakin</h3>
+                  <p class="font-body-md text-body-md text-surface/80 leading-relaxed text-[15px]">
+                    Eto yung time na nagvid tayoo tapos feel ko that time tayong dalawa lang nun like satin yung moment
+                    nayun ikaw lang talaga nakikita ko wala nang iba that moment was so special.
+                  </p>
+                  <button onclick="event.stopPropagation(); this.closest('.flip-card').classList.remove('flipped')"
+                    class="mt-5 text-surface/60 font-label-md text-[12px] uppercase tracking-widest flex items-center gap-1 hover:text-surface transition-colors">
+                    <span class="material-symbols-outlined text-[14px]">flip_camera_android</span> Flip back
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-surface-container p-6 md:p-8 rounded-xl flex flex-col justify-center reveal">
+              <h3 class="font-headline-sm text-[20px] md:text-headline-sm mb-3">All Moments Together With You Are
+                Special</h3>
+              <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                I don't know what I did to deserve you, but I'm grateful every day for the way you make my life
+                brighter, Truly you're God's greatest blessing sakinn.
+              </p>
+            </div>
+          </div>
+
+          <div class="md:col-span-4 w-full aspect-square md:aspect-[4/4] reveal soft-glow flip-card"
+            onclick="this.classList.toggle('flipped')">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <img class="w-full h-full object-cover rounded-xl" alt="Memory picnic layout" src="images/image4.jfif">
+                <div class="flip-hint">
+                  <span class="material-symbols-outlined text-[13px]"
+                    style="font-variation-settings:'FILL' 1;">touch_app</span>
+                  Tap to reveal
+                </div>
+              </div>
+              <div class="flip-card-back">
+                <span class="material-symbols-outlined text-surface/60 text-[32px] mb-4"
+                  style="font-variation-settings:'FILL' 1;">
+                  wb_sunny
+                </span>
+                <h3 class="font-headline-sm text-[18px] text-surface mb-3">Nung Time Na Nagkaraoke Tayo</h3>
+                <p class="font-body-md text-body-md text-surface/80 leading-relaxed text-[14px]">
+                  Eto po yung time na nageat muna tayo tapos naglakad tayo papunta SM Val, then naghanap tayo ng karaoke
+                  taposs parehas tayongg tiga bundok di ko din kasi alam kung pano nagwowork yunnn but yeah I finally
+                  got to sing with you that day and it was so much fun, lovee. Sana madami pa tayong ganung moments na
+                  magawaaa, I love youu!
+                </p>
+                <button onclick="event.stopPropagation(); this.closest('.flip-card').classList.remove('flipped')"
+                  class="mt-5 text-surface/60 font-label-md text-[12px] uppercase tracking-widest flex items-center gap-1 hover:text-surface transition-colors">
+                  <span class="material-symbols-outlined text-[14px]">flip_camera_android</span> Flip back
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="md:col-span-8 w-full aspect-[4/3] md:aspect-[16/9] reveal soft-glow flip-card"
+            onclick="this.classList.toggle('flipped')">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <img class="w-full h-full object-cover rounded-xl" alt="Cliffside walk" src="images/image5.jfif">
+                <div class="flip-hint">
+                  <span class="material-symbols-outlined text-[13px]"
+                    style="font-variation-settings:'FILL' 1;">touch_app</span>
+                  Tap to reveal
+                </div>
+              </div>
+              <div class="flip-card-back">
+                <span class="material-symbols-outlined text-surface/60 text-[32px] mb-4"
+                  style="font-variation-settings:'FILL' 1;">
+                  favorite
+                </span>
+                <h3 class="font-headline-sm text-[22px] text-surface mb-3">The Moment I knew</h3>
+                <p class="font-body-md text-body-md text-surface/80 leading-relaxed">
+                  Eto yung unang date natin and grabee lovee tuwang tuwa ako kasi alam mo yun unang kita palang natin
+                  pero pinakita mo agad sakin kung gaano ka nagcacare sakin and kung paano moko mamahalin dun ako nahook
+                  ng sobraa sayoo, sinubuan moko nunn sorry po lovee nashock lang kasi tlga ako peroo deep inside I'm so
+                  happy kasii you're so wiffeyy material.
+                </p>
+                <button onclick="event.stopPropagation(); this.closest('.flip-card').classList.remove('flipped')"
+                  class="mt-6 text-surface/60 font-label-md text-[12px] uppercase tracking-widest flex items-center gap-1 hover:text-surface transition-colors">
+                  <span class="material-symbols-outlined text-[14px]">flip_camera_android</span> Flip back
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="relative py-12 md:py-24 px-4 md:px-20 bg-surface-container-low overflow-hidden" id="our-film">
+
+      <!-- DAGDAG MO ITO ↓ -->
+      <canvas id="sparks-canvas"
+        style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;"></canvas>
+      <!-- HANGGANG DITO ↑ -->
+
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-10 md:mb-16 reveal">
+
+          <h2 class="font-headline-md text-[26px] md:text-headline-md text-on-surface">OUR VIDEO</h2>
+          <p class="font-body-md text-body-md text-on-surface-variant mt-3 max-w-md mx-auto">
+            Pagka pinapaulit ulit ko to love my heart melts every time like this video is a masterpiece, this shows kung
+            gaano natin kamahal ang isa't isa, Ikaw pa nagedit netoo lovee I really really appreciate it so so muchh,
+            Mahal na mahal kita my Mrs. Thea Bianca Z. Clemente
+          </p>
+        </div>
+
+        <div class="reveal soft-glow rounded-xl overflow-hidden">
+          <div class="video-wrapper">
+            <video controls loop playsinline class="w-full h-full object-cover">
+              <source src="vid.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+        <p class="text-center font-body-md text-[14px] text-on-surface-variant mt-5 italic">
+          "Every love story is beautiful, but ours is my favorite."
+        </p>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer
+    class="bg-surface w-full py-12 flex flex-col items-center gap-3 text-center px-6 border-t border-surface-container">
+    <span class="material-symbols-outlined text-primary text-[18px]"
+      style="font-variation-settings:'FILL' 1;">favorite</span>
+    <div class="font-headline-sm text-[24px] text-on-surface tracking-tighter">Cody & Thea</div>
+    <p class="font-body-md text-body-md text-on-surface-variant max-w-xs text-[14px]">
+      We can't erase our imperfect days, but I promise to always hold your hand as we draw our forever. Kasama ka sa bawat guhit, Thea, til death do us part. I love you endlessly."
+    </p>
+  </footer>
+
+  <script>
+    const triggerReveals = () => {
+      const elements = document.querySelectorAll('.reveal');
+      const triggerPoint = window.innerHeight - 40;
+      elements.forEach(el => {
+        if (el.getBoundingClientRect().top < triggerPoint) {
+          el.classList.add('active');
+        }
+      });
+    };
+
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        document.querySelectorAll('.hero-item').forEach(el => el.classList.add('hero-visible'));
+      }, 100);
+      triggerReveals();
+    });
+
+    window.addEventListener('scroll', triggerReveals, { passive: true });
+    window.addEventListener('resize', triggerReveals, { passive: true });
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    // Cleaned Play/Pause system para sa voice note nang hindi kumagalaw ang screen
+    document.getElementById('gallery-trigger').addEventListener('click', function (e) {
+      e.preventDefault();
+
+      const voice = document.getElementById('my-voice');
+      if (voice) {
+        if (!voice.paused) {
+          voice.pause();
+        } else {
+          voice.play().catch(error => {
+            console.log("May error sa pag-play ng audio: ", error);
+          });
+        }
+      }
+    });
+    (function () {
+      const canvas = document.getElementById('hearts-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const section = document.getElementById('our-story');
+
+      const COLORS = ['#d9a8a0', '#e8c4bb', '#c2847a', '#f0d6d2', '#b87070', '#f5e0dd'];
+     // Nilakihan natin ang mga values (pwedeng palitan depende sa trip mong laki)
+const HEART_SIZES = [20, 26, 32, 40, 18, 28];
+      let hearts = [];
+      let raf;
+
+      function resize() {
+        canvas.width = section.offsetWidth;
+        canvas.height = section.offsetHeight;
+      }
+
+      function heartPath(ctx, x, y, size) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.scale(size / 30, size / 30);
+        ctx.beginPath();
+        ctx.moveTo(0, -8);
+        ctx.bezierCurveTo(10, -20, 26, -10, 0, 10);
+        ctx.bezierCurveTo(-26, -10, -10, -20, 0, -8);
+        ctx.restore();
+      }
+
+      function spawnHeart() {
+        return {
+          x: Math.random() * canvas.width,
+          y: -20,
+          size: HEART_SIZES[Math.floor(Math.random() * HEART_SIZES.length)],
+          color: COLORS[Math.floor(Math.random() * COLORS.length)],
+          speed: 0.5 + Math.random() * 1.2,
+          drift: (Math.random() - 0.5) * 0.6,
+          opacity: 0.18 + Math.random() * 0.35,
+          wobble: Math.random() * Math.PI * 2,
+          wobbleSpeed: 0.02 + Math.random() * 0.03,
+        };
+      }
+
+      function init() {
+        resize();
+        hearts = [];
+        // Seed some hearts spread across the section height
+        for (let i = 0; i < 60; i++) {
+          const h = spawnHeart();
+          h.y = Math.random() * canvas.height;
+          hearts.push(h);
+        }
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        hearts.forEach(h => {
+          h.y += h.speed;
+          h.x += h.drift + Math.sin(h.wobble) * 0.4;
+          h.wobble += h.wobbleSpeed;
+
+          if (h.y > canvas.height + 30) {
+            Object.assign(h, spawnHeart());
+          }
+
+          ctx.globalAlpha = h.opacity;
+          ctx.fillStyle = h.color;
+          heartPath(ctx, h.x, h.y, h.size);
+          ctx.fill();
+        });
+        ctx.globalAlpha = 1;
+
+        // Occasionally add a new heart to keep density fresh
+        if (Math.random() < 0.08 && hearts.length < 110) hearts.push(spawnHeart());
+
+        raf = requestAnimationFrame(draw);
+      }
+
+      // Only run while the section is in view (performance)
+      const observer = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting) {
+          if (!raf) { init(); draw(); }
+        } else {
+          cancelAnimationFrame(raf);
+          raf = null;
+        }
+      }, { threshold: 0.05 });
+
+      observer.observe(section);
+      window.addEventListener('resize', () => { resize(); });
+    })();
+
+    // ── Sparkling Background ──
+    (function () {
+      const canvas = document.getElementById('sparks-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const section = document.getElementById('our-film');
+      let sparks = [], raf;
+
+      function resize() {
+        canvas.width = section.offsetWidth;
+        canvas.height = section.offsetHeight;
+      }
+
+      function newSpark() {
+        return {
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          r: 3 + Math.random() * 5,
+          alpha: 0,
+          max: 0.5 + Math.random() * 0.5,
+          speed: 0.012 + Math.random() * 0.02,
+          growing: true
+        };
+      }
+
+      function init() {
+        resize();
+       sparks = Array.from({ length: 150 }, newSpark);
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        sparks.forEach((s, i) => {
+          if (s.growing) {
+            s.alpha += s.speed;
+            if (s.alpha >= s.max) s.growing = false;
+          } else {
+            s.alpha -= s.speed;
+            if (s.alpha <= 0) sparks[i] = newSpark();
+          }
+          ctx.globalAlpha = s.alpha;
+          ctx.fillStyle = '#c2847a';
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+          ctx.fill();
+
+          // draw a tiny 4-point star
+          ctx.fillStyle = '#e8c4bb';
+          ctx.globalAlpha = s.alpha * 0.8;
+          for (let p = 0; p < 4; p++) {
+            const angle = (p / 4) * Math.PI * 2;
+            const px = s.x + Math.cos(angle) * s.r * 2.5;
+            const py = s.y + Math.sin(angle) * s.r * 2.5;
+            ctx.beginPath();
+            ctx.arc(px, py, s.r * 0.4, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        });
+        ctx.globalAlpha = 1;
+        raf = requestAnimationFrame(draw);
+      }
+
+      const observer = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting) {
+          if (!raf) { init(); draw(); }
+        } else {
+          cancelAnimationFrame(raf);
+          raf = null;
+        }
+      }, { threshold: 0.05 });
+
+      observer.observe(section);
+      window.addEventListener('resize', resize);
+    })();
+
+    // ── Hero Floating Sunflower Petals Effect ──
+   // ── Hero Floating LITERAL Sunflowers Effect ──
+    (function () {
+      const canvas = document.getElementById('hero-effects-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const section = canvas.parentElement;
+
+      // Mga kulay para sa petals at sa gitna (center disc) ng sunflower
+      const PETAL_COLORS = ['#FFD700', '#FFC72C', '#F9A602', '#FFE135'];
+      const CENTER_COLORS = ['#3B2219', '#4A2E22', '#2B140C']; // Deep dark browns/blacks
+      
+      let sunflowers = [];
+      let raf;
+
+      function resize() {
+        canvas.width = section.offsetWidth;
+        canvas.height = section.offsetHeight;
+      }
+
+      function spawnSunflower() {
+        const baseSize = 12 + Math.random() * 16; // PINALAKING SUKAT (Mas malaki ang range ngayon)
+        return {
+          x: Math.random() * canvas.width,
+          y: Math.random() * -100 - 50,          // Mas mataas ang simula para swabe ang pagpasok
+          size: baseSize,                        // Radius ng kabuuang bulaklak
+          petalCount: 9 + Math.floor(Math.random() * 5), // Bilang ng petals kada sunflower
+          petalColor: PETAL_COLORS[Math.floor(Math.random() * PETAL_COLORS.length)],
+          centerColor: CENTER_COLORS[Math.floor(Math.random() * CENTER_COLORS.length)],
+          opacity: 0.6 + Math.random() * 0.4,    // Mas matingkad para litaw na litaw
+          speedY: 0.7 + Math.random() * 1.2,     // Bilis ng pagbaba
+          speedX: 0.4 + Math.random() * 0.8,     // Tinatangay ng banayad na hangin pakanan
+          wobble: Math.random() * Math.PI * 2,
+          wobbleSpeed: 0.01 + Math.random() * 0.02,
+          rotation: Math.random() * Math.PI,
+          rotationSpeed: (Math.random() - 0.5) * 0.03 // Umiikot ang buong sunflower habang nahuhulog
+        };
+      }
+
+      function init() {
+        resize();
+        sunflowers = [];
+        // PINADAMIHAN: Binuhos natin sa 65 sunflowers para mas buhay ang screen!
+        for (let i = 0; i < 65; i++) {
+          const s = spawnSunflower();
+          s.y = Math.random() * canvas.height; // Ikalat muna sa screen sa unang load
+          sunflowers.push(s);
+        }
+      }
+
+      function drawSunflower(ctx, s) {
+        ctx.save();
+        ctx.globalAlpha = s.opacity;
+        ctx.translate(s.x, s.y);
+        ctx.rotate(s.rotation);
+
+        const centerRadius = s.size * 0.35; // Sukat ng brown na gitna
+        const petalLength = s.size * 0.75;  // Haba ng mga dilaw na petals
+        const petalWidth = s.size * 0.22;   // Lapad ng petals
+
+        // 1. IGUGUHIT ANG MGA LITERAL NA PETALS (Paikot sa center)
+        ctx.fillStyle = s.petalColor;
+        for (let i = 0; i < s.petalCount; i++) {
+          ctx.rotate((Math.PI * 2) / s.petalCount);
+          
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          // Lumilikha ng matangos at matulis na dulo ng sunflower petal
+          ctx.quadraticCurveTo(-petalWidth, -petalLength * 0.5, 0, -petalLength);
+          ctx.quadraticCurveTo(petalWidth, -petalLength * 0.5, 0, 0);
+          ctx.fill();
+        }
+
+        // 2. IGUGUHIT ANG LITERAL NA CENTER DISC (Ang maitim/brown na gitna ng sunflower)
+        ctx.beginPath();
+        ctx.arc(0, 0, centerRadius, 0, Math.PI * 2);
+        ctx.fillStyle = s.centerColor;
+        ctx.fill();
+
+        // Velvet texture ring para sa sunflower core (detalye sa gitna)
+        ctx.beginPath();
+        ctx.arc(0, 0, centerRadius * 0.7, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
+        ctx.fill();
+
+        ctx.restore();
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        sunflowers.forEach((s, index) => {
+          s.y += s.speedY;
+          s.x += s.speedX + Math.sin(s.wobble) * 0.25;
+          s.wobble += s.wobbleSpeed;
+          s.rotation += s.rotationSpeed;
+
+          // Respawn kapag lumabas na sa viewport
+          if (s.y > canvas.height + 50 || s.x > canvas.width + 50) {
+            sunflowers[index] = spawnSunflower();
+          }
+
+          drawSunflower(ctx, s);
+        });
+
+        raf = requestAnimationFrame(draw);
+      }
+
+      const observer = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting) {
+          if (!raf) { init(); draw(); }
+        } else {
+          cancelAnimationFrame(raf);
+          raf = null;
+        }
+      }, { threshold: 0.05 });
+
+      observer.observe(section);
+      window.addEventListener('resize', () => { resize(); });
+    })();
+  </script>
+</body>
+
+</html>

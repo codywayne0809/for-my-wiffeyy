@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#e5e2e1",
+                        "tertiary-container": "#cac8c7",
+                        "on-primary-container": "#605142",
+                        "primary": "#6b5c4c",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed-dim": "#c8c6c2",
+                        "on-tertiary-fixed": "#1c1b1b",
+                        "inverse-surface": "#362f28",
+                        "surface": "#fff8f4",
+                        "on-primary-fixed": "#241a0e",
+                        "surface-bright": "#fff8f4",
+                        "outline": "#7f756d",
+                        "secondary-container": "#e1dfdb",
+                        "surface-variant": "#ece1d6",
+                        "surface-container-highest": "#ece1d6",
+                        "primary-fixed": "#f4dfcb",
+                        "surface-container": "#f8ece1",
+                        "secondary": "#5e5e5b",
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "background": "#fff8f4",
+                        "on-surface": "#201b14",
+                        "surface-tint": "#6b5c4c",
+                        "on-tertiary": "#ffffff",
+                        "inverse-on-surface": "#fbefe4",
+                        "surface-container-low": "#fef2e7",
+                        "surface-dim": "#e3d8ce",
+                        "outline-variant": "#d0c4bb",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed-variant": "#524436",
+                        "inverse-primary": "#d7c3b0",
+                        "on-tertiary-container": "#545453",
+                        "secondary-fixed": "#e4e2dd",
+                        "tertiary-fixed-dim": "#c8c6c5",
+                        "on-surface-variant": "#4d453e",
+                        "on-secondary-container": "#63635f",
+                        "tertiary": "#5f5e5e",
+                        "surface-container-high": "#f2e6dc",
+                        "on-tertiary-fixed-variant": "#474746",
+                        "on-error-container": "#93000a",
+                        "primary-fixed-dim": "#d7c3b0",
+                        "primary-container": "#d9c5b2",
+                        "on-secondary-fixed": "#1b1c19",
+                        "on-background": "#201b14",
+                        "on-primary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed-variant": "#474744"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "24px",
+                        "stack-sm": "16px",
+                        "margin-desktop": "80px",
+                        "gutter": "32px",
+                        "stack-lg": "64px",
+                        "stack-md": "32px",
+                        "stack-xl": "120px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Playfair Display"],
+                        "label-md": ["DM Sans"],
+                        "body-lg": ["DM Sans"],
+                        "headline-lg-mobile": ["Playfair Display"],
+                        "headline-lg": ["Playfair Display"],
+                        "body-md": ["DM Sans"],
+                        "headline-sm": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["48px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                        "label-md": ["14px", {"lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["40px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                        "headline-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-sm": ["32px", {"lineHeight": "1.3", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+        .envelope-wrapper {
+            perspective: 1000px;
+        }
+        .envelope {
+            position: relative;
+            width: 320px;
+            height: 220px;
+            background: #fef2e7; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: transform 0.5s ease;
+        }
+        .envelope-top {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 160px solid transparent;
+            border-right: 160px solid transparent;
+            border-top: 110px solid #ece1d6; 
+            transform-origin: top;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 4;
+        }
+        .envelope.open .envelope-top {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+        .envelope-right {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 0;
+            height: 0;
+            border-right: 160px solid #f8ece1; 
+            border-top: 110px solid transparent;
+            border-bottom: 110px solid transparent;
+            z-index: 3;
+        }
+        .envelope-left {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 160px solid #f8ece1; 
+            border-top: 110px solid transparent;
+            border-bottom: 110px solid transparent;
+            z-index: 3;
+        }
+        .envelope-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 160px solid transparent;
+            border-right: 160px solid transparent;
+            border-bottom: 110px solid #f2e6dc; 
+            z-index: 3;
+        }
+        .wax-seal {
+            position: absolute;
+            top: 110px;
+            left: 160px;
+            width: 44px;
+            height: 44px;
+            background: #6b5c4c; 
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transition: all 0.5s ease;
+        }
+        .envelope.open .wax-seal {
+            opacity: 0;
+            transform: translate(-50%, -100%) scale(0.8);
+        }
+        .paper-texture {
+            background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
+            opacity: 0.1;
+        }
+        .transition-slow {
+            transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary-container selection:text-on-primary-container overflow-hidden">
+
+    <header class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop py-10">
+        <div class="font-headline-sm text-headline-sm text-on-surface tracking-tighter">
+            C & T
+        </div>
+        <div class="font-label-md text-label-md uppercase tracking-widest text-on-surface-variant">
+            EST. 2025
+        </div>
+    </header>
+
+    <main class="relative w-full h-screen flex flex-col items-center justify-center transition-slow" id="gate-canvas">
+        <div class="group cursor-pointer flex flex-col items-center" onclick="handleOpenEnvelope()">
+            <div class="envelope-wrapper animate-float">
+                <div class="envelope rounded-lg overflow-visible" id="envelope-element">
+                    <div class="absolute inset-0 paper-texture rounded-lg z-10 pointer-events-none"></div>
+                    <div class="envelope-top"></div>
+                    <div class="envelope-right"></div>
+                    <div class="envelope-left"></div>
+                    <div class="envelope-bottom"></div>
+                    <div class="wax-seal">
+                        <span class="material-symbols-outlined text-surface text-xl" style="font-variation-settings: 'FILL' 1;">favorite</span>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-16 text-center">
+                <p class="font-headline-sm text-headline-sm italic text-tertiary opacity-80 group-hover:opacity-100 transition-opacity duration-500">
+                    For you my love...
+                </p>
+                <div class="mt-4 flex justify-center">
+                    <span class="h-px w-0 bg-tertiary group-hover:w-16 transition-all duration-700 ease-in-out"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="absolute bottom-10 left-margin-desktop opacity-20 hidden md:block">
+            <span class="font-label-md text-label-md uppercase tracking-[0.3em] text-on-surface-variant">Private Invitation</span>
+        </div>
+        <div class="absolute bottom-10 right-margin-desktop opacity-20 hidden md:block">
+            <span class="font-label-md text-label-md uppercase tracking-[0.3em] text-on-surface-variant">October 2025</span>
+        </div>
+    </main>
+
+    <section class="fixed inset-0 w-full h-full opacity-0 pointer-events-none transition-slow bg-surface overflow-y-auto" id="main-content">
+        <div class="relative w-full h-screen flex items-center justify-center px-margin-mobile md:px-margin-desktop">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter w-full max-w-screen-xl">
+                <div class="md:col-span-6 flex flex-col justify-center">
+                    <span class="font-label-md text-label-md uppercase tracking-widest text-primary mb-6">Our Journey Begins</span>
+                    <h1 class="font-headline-lg text-headline-lg md:text-headline-lg mb-8 leading-none">Chloe & <br/>Thomas</h1>
+                    <p class="font-body-lg text-body-lg text-on-surface-variant max-w-md mb-10">
+                        Join us in an intimate celebration of love, commitment, and the quiet beauty of a lifetime together. October 24, 2025.
+                    </p>
+                    <button onclick="window.location.href='index.html'" class="w-fit px-10 py-4 bg-tertiary text-surface rounded-full font-label-md text-label-md uppercase tracking-widest hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-1">
+                        View Details
+                    </button>
+                </div>
+                <div class="md:col-span-6 relative h-[600px]">
+                    <img alt="Romantic editorial wedding photography" class="w-full h-full object-cover rounded-xl shadow-2xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnMFQ5sBMzIjpY-C7vO1xPLJ4dkcdOB3EVzTOgZajpKHHq0_Ov-A_U7maeLentGkfSa80V5jGcP4Uz2jRgiSaJWNi6FSTmdK6YuhOO-dVuClkBA1U3xUvzUiZMu2oGERfHeLTuxKNlmBoa82DQxGbCtEgq-dbm_65tezkEZAF0xPKQD9pNkAFfDU9qQpfJwEtd9_QpvEBYDAzrYTyx8al4kJK45ZP95unY05rVe-gr2Fdh7v1GBblroR3auPLrdmIXmtZX96crodAw"/>
+                    <div class="absolute -bottom-8 -left-8 bg-surface-container p-8 shadow-xl hidden md:block">
+                        <p class="font-headline-sm text-headline-sm italic text-primary">"Forever starts now"</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="w-full py-stack-lg flex flex-col items-center gap-stack-sm text-center px-margin-desktop bg-surface-container-highest">
+            <div class="font-headline-md text-headline-md text-tertiary">C & T</div>
+            <div class="flex gap-6">
+                <a class="font-label-md text-label-md uppercase text-on-surface-variant hover:opacity-70 transition-opacity" href="#">Privacy</a>
+                <a class="font-label-md text-label-md uppercase text-on-surface-variant hover:opacity-70 transition-opacity" href="#">Contact</a>
+            </div>
+            <p class="font-body-md text-body-md text-on-surface-variant mt-4">Forever Starts Now — October 24, 2025</p>
+        </footer>
+    </section>
+
+    <script>
+        function handleOpenEnvelope() {
+            const envelope = document.getElementById('envelope-element');
+            const gate = document.getElementById('gate-canvas');
+            
+            // 1. Trigger wax seal pop and letter flap open animation
+            envelope.classList.add('open');
+            
+            // 2. Wait 800ms for the flap animation to complete, then fade out the screen gracefully
+            setTimeout(() => {
+                gate.classList.add('fade-out');
+                
+                // 3. Right as the screen fully fades out (1000ms later), redirect her seamlessly to index.html
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1000);
+            }, 800);
+        }
+
+        // Subtle 3D mouse parallax effect for the envelope
+        document.addEventListener('mousemove', (e) => {
+            const gate = document.getElementById('gate-canvas');
+            if (gate && !gate.classList.contains('fade-out')) {
+                const x = (e.clientX / window.innerWidth - 0.5) * 10;
+                const y = (e.clientY / window.innerHeight - 0.5) * 10;
+                const envelope = document.getElementById('envelope-element');
+                if(envelope) {
+                    envelope.style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
