@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html class="scroll-smooth" lang="en">
-
+<html class="scroll-smooth light" lang="en">
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -96,6 +95,7 @@
     }
   </script>
   <style>
+   
     * {
       box-sizing: border-box;
     }
@@ -296,11 +296,311 @@
       }
     }
   </style>
-</head>
 
+  <!-- Login page extra styles -->
+  <style>
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+        .envelope-wrapper {
+            perspective: 1000px;
+        }
+        .envelope {
+            position: relative;
+            width: 320px;
+            height: 220px;
+            background: #fef2e7; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: transform 0.5s ease;
+        }
+        .envelope-top {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 160px solid transparent;
+            border-right: 160px solid transparent;
+            border-top: 110px solid #ece1d6; 
+            transform-origin: top;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 4;
+        }
+        .envelope.open .envelope-top {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+        .envelope-right {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 0;
+            height: 0;
+            border-right: 160px solid #f8ece1; 
+            border-top: 110px solid transparent;
+            border-bottom: 110px solid transparent;
+            z-index: 3;
+        }
+        .envelope-left {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 160px solid #f8ece1; 
+            border-top: 110px solid transparent;
+            border-bottom: 110px solid transparent;
+            z-index: 3;
+        }
+        .envelope-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 160px solid transparent;
+            border-right: 160px solid transparent;
+            border-bottom: 110px solid #f2e6dc; 
+            z-index: 3;
+        }
+        .wax-seal {
+            position: absolute;
+            top: 110px;
+            left: 160px;
+            width: 44px;
+            height: 44px;
+            background: #6b5c4c; 
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transition: all 0.5s ease;
+        }
+        .envelope.open .wax-seal {
+            opacity: 0;
+            transform: translate(-50%, -100%) scale(0.8);
+        }
+        .paper-texture {
+            background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
+            opacity: 0.1;
+        }
+        .fade-out-element {
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+    
+
+    /* Combined page transition */
+    #gate-wrapper {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: #fff8f4;
+      transition: opacity 0.6s ease;
+    }
+    #gate-wrapper.gate-hiding {
+      opacity: 0;
+      pointer-events: none;
+    }
+    #main-wrapper {
+      opacity: 0;
+      transition: opacity 0.8s ease-in-out;
+    }
+    #main-wrapper.page-loaded {
+      opacity: 1;
+    }
+  </style>
+</head>
 <body class="bg-surface text-on-surface selection:bg-primary-container selection:text-on-primary-container">
 
-  <header
+  <!-- ═══════ GATE / LOGIN PAGE ═══════ -->
+  <div id="gate-wrapper">
+    <div class="bg-[#fff8f4] text-[#201b14] w-full h-screen overflow-hidden">
+      <!-- Canvas para sa sabog ng puso (Naka-overlay sa buong screen) -->
+    <canvas id="heart-explosion-canvas" class="absolute inset-0 w-full h-full pointer-events-none hidden z-50"></canvas>
+
+    <!-- Ang UI ng Sobre -->
+    <main id="gate-container" class="w-full h-screen flex flex-col items-center justify-center relative z-10">
+        <div class="group cursor-pointer flex flex-col items-center" onclick="handleOpenEnvelope(this)">
+            <div class="envelope-wrapper animate-float">
+                <div class="envelope rounded-lg" id="envelope-element">
+                    <div class="absolute inset-0 paper-texture rounded-lg z-10 pointer-events-none"></div>
+                    <div class="envelope-top"></div>
+                    <div class="envelope-right"></div>
+                    <div class="envelope-left"></div>
+                    <div class="envelope-bottom"></div>
+                    <div class="wax-seal">
+                        <span class="material-symbols-outlined text-[#fff8f4] text-xl" style="font-variation-settings: 'FILL' 1;">favorite</span>
+                    </div>
+                </div>
+            </div>
+            <div id="text-container" class="mt-16 text-center transition-opacity duration-500">
+                <p class="font-headline-sm text-3xl italic text-[#5f5e5e] opacity-80 group-hover:opacity-100 transition-opacity duration-500">
+                    For you my Love...
+                </p>
+                <div class="mt-4 flex justify-center">
+                    <span class="h-px w-0 bg-[#5f5e5e] group-hover:w-24 transition-all duration-700 ease-in-out"></span>
+                </div>
+            </div>
+        </div>
+    </main><script>
+        let animationActive = false;
+        let hearts = [];
+        let animationFrameId = null; // Dagdag tracking para mapatay ang process
+        const HEART_COLORS = ['#ff4d6d', '#ff758f', '#ff8fa3', '#ffb3c1', '#c9184a', '#a4133c'];
+
+        const canvas = document.getElementById('heart-explosion-canvas');
+        const ctx = canvas.getContext('2d', { alpha: false }); // Mas mabilis i-render ng browser kapag false ang alpha transparency sa context context
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        function drawHeartShape(ctx, x, y, size) {
+            ctx.beginPath();
+            ctx.moveTo(x, y + size / 4);
+            ctx.quadraticCurveTo(x, y, x + size / 2, y);
+            ctx.quadraticCurveTo(x + size, y, x + size, y + size / 3);
+            ctx.quadraticCurveTo(x + size, y + size * 2/3, x + size / 2, y + size);
+            ctx.quadraticCurveTo(x, y + size * 2/3, x, y + size / 3);
+            ctx.quadraticCurveTo(x, y, x, y + size / 4);
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        function createHeart() {
+            return {
+                x: canvas.width / 2,
+                y: canvas.height / 2 - 30,
+                size: 10 + Math.random() * 22, // Pinaliit ng kaunti para mas gumaan sa GPU
+                color: HEART_COLORS[Math.floor(Math.random() * HEART_COLORS.length)],
+                speedX: (Math.random() - 0.5) * 24,
+                speedY: (Math.random() - 0.5) * 24 - 4, 
+                opacity: 1,
+                decay: 0.008 + Math.random() * 0.008, // Mas mabilis mawala para hindi maipon sa memory
+                rotation: Math.random() * Math.PI * 2,
+                rotationSpeed: (Math.random() - 0.5) * 0.12
+            };
+        }
+
+        function runHeartEngine() {
+            if (!animationActive) return;
+            ctx.fillStyle = '#fff8f4'; // Tugma sa background mo para i-clear ang visual artifacts
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = hearts.length - 1; i >= 0; i--) {
+                const h = hearts[i];
+                h.x += h.speedX;
+                h.y += h.speedY;
+                h.opacity -= h.decay;
+                h.rotation += h.rotationSpeed;
+
+                if (h.opacity <= 0) {
+                    hearts.splice(i, 1);
+                } else {
+                    ctx.save();
+                    ctx.globalAlpha = h.opacity;
+                    ctx.translate(h.x, h.y);
+                    ctx.rotate(h.rotation);
+                    ctx.fillStyle = h.color;
+                    drawHeartShape(ctx, -h.size/2, -h.size/2, h.size);
+                    ctx.restore();
+                }
+            }
+            animationFrameId = requestAnimationFrame(runHeartEngine);
+        }
+
+        // ── MAIN CLICK TRIGGER WITH AUTOMATIC MEMORY CLEANUP ──
+        function handleOpenEnvelope(element) {
+            if (animationActive) return;
+
+            const envelope = document.getElementById('envelope-element');
+            const textContainer = document.getElementById('text-container');
+            const gateContainer = document.getElementById('gate-container');
+
+            envelope.classList.add('open');
+            if (textContainer) textContainer.classList.add('fade-out-element');
+            element.style.pointerEvents = 'none';
+
+            setTimeout(() => {
+                canvas.classList.remove('hidden');
+                animationActive = true;
+
+                // 150 optimized explosive hearts
+                for (let i = 0; i < 150; i++) {
+                    hearts.push(createHeart());
+                }
+                runHeartEngine();
+
+                if (gateContainer) gateContainer.classList.add('fade-out-element');
+
+                // ── HARD REBOOT TRANSITION (Dito tinatanggal ang lag) ──
+                setTimeout(() => {
+                    // 1. Patayin ang rendering loops ng animation frame para maging 0% CPU usage
+                    animationActive = false;
+                    if (animationFrameId) {
+                        cancelAnimationFrame(animationFrameId);
+                    }
+                    
+                    // 2. Burahin ang array contents sa RAM
+                    hearts = [];
+                    
+                    // 3. I-wipe out ang canvas element para malinis ang DOM bago lumipat
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    canvas.remove();
+
+                    // 4. In-page transition — walang reload, pure fade lang!
+                    const gateWrapper = document.getElementById('gate-wrapper');
+                    const mainWrapper = document.getElementById('main-wrapper');
+                    if (gateWrapper) {
+                        gateWrapper.classList.add('gate-hiding');
+                        setTimeout(() => {
+                            gateWrapper.style.display = 'none';
+                        }, 650);
+                    }
+                    if (mainWrapper) {
+                        setTimeout(() => {
+                            mainWrapper.classList.add('page-loaded');
+                            // Trigger hero items and reveals now that main is visible
+                            document.querySelectorAll('.hero-item').forEach(el => el.classList.add('hero-visible'));
+                            window.dispatchEvent(new Event('scroll'));
+                        }, 100);
+                    }
+
+                }, 1100); // 1.1 seconds bago lumipat habang pababa na ang mga puso
+
+            }, 350);
+        }
+
+        // Mouse Parallax Engine
+        document.addEventListener('mousemove', (e) => {
+            if (!animationActive) {
+                const x = (e.clientX / window.innerWidth - 0.5) * 10;
+                const y = (e.clientY / window.innerHeight - 0.5) * 10;
+                const envelope = document.getElementById('envelope-element');
+                if(envelope) {
+                    envelope.style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
+                }
+            }
+        });
+    </script>
+    </div>
+  </div>
+
+  <!-- ═══════ MAIN WEBSITE ═══════ -->
+  <div id="main-wrapper">
+    <header
     class="fixed top-0 w-full bg-surface/95 flex justify-center items-center py-4 z-50 border-b border-surface-container-low/50 shadow-sm">
     <div class="flex items-center gap-2">
       <span class="material-symbols-outlined text-primary" style="font-variation-settings:'FILL' 1;">favorite</span>
@@ -893,7 +1193,9 @@ const HEART_SIZES = [20, 26, 32, 40, 18, 28];
       observer.observe(section);
       window.addEventListener('resize', () => { resize(); });
     })();
-  </script>
-</body>
 
+  </script>
+  </div>
+
+</body>
 </html>
